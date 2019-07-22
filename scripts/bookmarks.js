@@ -9,7 +9,6 @@ const bookmarks = (function () {
   const render = function() {
     console.log('render ran');
     let bookmarks = [ ...store.bookmarks ];
-    console.log(bookmarks);
     if (store.addNewBookmark) {
       $('.app-buttons').html('');
       $('.add-bookmarks').html(getAddBookmarkHtml());
@@ -70,16 +69,14 @@ const bookmarks = (function () {
     $('main').on('click', '.js-delete-bookmark', e=> {
       e.preventDefault();
       console.log('Delete Bookmark Button Pressed');
-      //get the data
-      const id = $(this).closest('div').data('id');
-      console.log(id);
+      const id = $(e.target).closest('li').data('id');
       api.deleteItem(id)
         .then(() => {
           store.deleteBookmark(id);
           render();
         });
-        //update the store
-        //render
+      //update the store
+      //render
     });
   };
 
@@ -122,9 +119,22 @@ const bookmarks = (function () {
 
   const getBookmarksHtml = function(bookmarks) {
     return bookmarks.map(bookmark => {
+      console.log(bookmark);
+      let stars = '';
+      for (let i=0; i<5; i++) {
+        console.log(bookmark.rating + ' ' + i);
+        if(i < bookmark.rating) {
+          stars += '<span class="fa fa-star checked"></span>';
+          console.log('checked');
+        }
+        else {
+          stars += '<span class="fa fa-star"></span>';
+        }
+      }
       return `
-        <li>
+        <li data-id=${bookmark.id}>
             <div data-id=${bookmark.id}>${bookmark.title}</div>
+            ${stars}
             <button type="submit" class="js-expand-bookmark">Expand</button>
             <button type="submit" class="js-delete-bookmark">Delete</button>
         </li>`;

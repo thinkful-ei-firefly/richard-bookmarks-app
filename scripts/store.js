@@ -14,7 +14,7 @@ const store = (function() {
   };
 
   const deleteBookmark = function(id) {
-    this.bookmarks.filter(bookmarkId => bookmarkId !== id);
+    this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== id);
   };
 
   return {
