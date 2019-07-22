@@ -6,7 +6,8 @@ What I used to build this app
 -css
 -javascript
 -jQuery
--APIs
+-Ajax 
 
 New things I learned
 FormData();
+API's

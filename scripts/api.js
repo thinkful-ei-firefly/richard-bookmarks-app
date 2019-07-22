@@ -20,7 +20,12 @@ const api = (function() {
     });
   };
 
-  const deleteItem = function() {};
+  const deleteItem = function(id) {
+    console.log(id);
+    return fetch(`${BASE_URL}/bookmarks/${id}`, {
+      method: 'DELETE',
+    });
+  };
   
   return {
     getItems,

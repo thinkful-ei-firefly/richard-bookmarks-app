@@ -5,7 +5,7 @@
 //initializes all javascript
 const main = function() {
   bookmarks.eventBinder();
-  bookmarks.render();
+  bookmarks.onStart();
 };
 
 $(main);

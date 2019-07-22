@@ -1,5 +1,5 @@
 'use strict';
-
+/*global api*/
 
 //store is for acting on bookmark items
 //eslint-disable-next-line no-unused-vars
@@ -13,13 +13,14 @@ const store = (function() {
     this.bookmarks.push(item);
   };
 
-  
-
-  //deleteitem
+  const deleteBookmark = function(id) {
+    this.bookmarks.filter(bookmarkId => bookmarkId !== id);
+  };
 
   return {
     addNewBookmark,
     bookmarks,
     addBookmark,
+    deleteBookmark,
   };
 })();

@@ -9,20 +9,35 @@ const bookmarks = (function () {
   const render = function() {
     console.log('render ran');
     let bookmarks = [ ...store.bookmarks ];
+    console.log(bookmarks);
     if (store.addNewBookmark) {
-      const mainHtml = addItemHtml();
-      $('main').html(mainHtml);
+      $('.app-buttons').html('');
+      $('.add-bookmarks').html(getAddBookmarkHtml());
+      $('.bookmarks').html('');
     } else {
 
       //deal with expanded
-
-      let mainHtml = '';//get app buttons and bookmarks html
+      
+      $('.app-buttons').html(getAppButtonHtml()); 
+      $('.add-bookmarks').html('');
+      $('.bookmarks').html(getBookmarksHtml(bookmarks));
+      
     }
   };
 
   const eventBinder = function() {
     handleAddNew();
     handleAddBookmark();
+    handleDeleteBookmark();
+  };
+
+  const onStart = function() {
+    api.getItems()
+      .then(res => res.json())
+      .then(bookmarkList => {
+        bookmarkList.forEach(bookmark => store.addBookmark(bookmark));
+        render();
+      } );
   };
   
   //On main page, goes to add bookmark page when pressed
@@ -40,13 +55,31 @@ const bookmarks = (function () {
     $('main').on('click', '.js-add-bookmark', e => {
       e.preventDefault();
       console.log('Add Bookmark Form Button Pressed');
-      store.addNewItem = false;
+      store.addNewBookmark = false;
       api.createItem(serializeJson($('.add-bookmark-form')[0]))
         .then(res => res.json())
         .then(item => {
+          item.expand = false;
           store.addBookmark(item);
           render();
         });
+    });
+  };
+
+  const handleDeleteBookmark = function() {
+    $('main').on('click', '.js-delete-bookmark', e=> {
+      e.preventDefault();
+      console.log('Delete Bookmark Button Pressed');
+      //get the data
+      const id = $(this).closest('div').data('id');
+      console.log(id);
+      api.deleteItem(id)
+        .then(() => {
+          store.deleteBookmark(id);
+          render();
+        });
+        //update the store
+        //render
     });
   };
 
@@ -54,11 +87,18 @@ const bookmarks = (function () {
     const formData = new FormData(form);
     const o = {};
     formData.forEach((val, name) => o[name] = val);
-    o.expand = false;
     return JSON.stringify(o);
   };
 
-  const addItemHtml = function() {
+  const getAppButtonHtml = function() {
+    return `
+    <form class="js-app-form">
+        <button type="submit" class="js-add-new">Add Bookmark</button>
+        <button type="submit" class="js-sort">Sort by Rating</button>
+    </form>`;
+  };
+
+  const getAddBookmarkHtml = function() {
     return `
     <form class="add-bookmark-form">
         <label for="title">Title:</label>
@@ -80,9 +120,21 @@ const bookmarks = (function () {
     </form>`;
   };
 
+  const getBookmarksHtml = function(bookmarks) {
+    return bookmarks.map(bookmark => {
+      return `
+        <li>
+            <div data-id=${bookmark.id}>${bookmark.title}</div>
+            <button type="submit" class="js-expand-bookmark">Expand</button>
+            <button type="submit" class="js-delete-bookmark">Delete</button>
+        </li>`;
+    });
+  };
+
   return {
     render,
     eventBinder,
+    onStart,
   };
 })();
 
