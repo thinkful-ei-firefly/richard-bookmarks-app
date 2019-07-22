@@ -7,3 +7,6 @@ What I used to build this app
 -javascript
 -jQuery
 -APIs
+
+New things I learned
+FormData();
