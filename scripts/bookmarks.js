@@ -9,14 +9,16 @@ const bookmarks = (function () {
   const render = function() {
     console.log('render ran');
     let bookmarks = [ ...store.bookmarks ];
+    
+    //bookmark sort by rating: 0 --> show all
+    bookmarks = store.filterByRating();
+    
     if (store.addNewBookmark) {
       $('.app-buttons').html('');
       $('.add-bookmarks').html(getAddBookmarkHtml());
       $('.bookmarks').html('');
     } else {
-
-      //deal with expanded - in getBookmarksHtml
-      
+      //Expanded bookmarks
       $('.app-buttons').html(getAppButtonHtml()); 
       $('.add-bookmarks').html('');
       $('.bookmarks').html(getBookmarksHtml(bookmarks));
@@ -88,7 +90,13 @@ const bookmarks = (function () {
   const handleSortByRating = function() {
     $('main').on('click', '.js-sort', e => {
       e.preventDefault();
-      console.log('Sort by Rating button pushed');
+      if ($('.js-rating').val() === '1 Star') store.sortByRating = 1;
+      else if ($('.js-rating').val() === '2 Stars') store.sortByRating = 2;
+      else if ($('.js-rating').val() === '3 Stars') store.sortByRating = 3;
+      else if ($('.js-rating').val() === '4 Stars') store.sortByRating = 4;
+      else if ($('.js-rating').val() === '5 Stars') store.sortByRating = 5;
+      else store.sortByRating = 0;
+      render();
     });
   };
 
@@ -103,7 +111,15 @@ const bookmarks = (function () {
     return `
     <form class="js-app-form">
         <button type="submit" class="js-add-new">Add Bookmark</button>
-        <button type="submit" class="js-sort">Sort by Rating</button>
+        <input type="button" class="js-sort" value="Filter by Rating"/>
+        <select class="js-rating">
+          <option>Show All</option>
+          <option>1 Star</option>
+          <option>2 Stars</option>
+          <option>3 Stars</option>
+          <option>4 Stars</option>
+          <option>5 Stars</option>
+        </select>
     </form>`;
   };
 
@@ -113,7 +129,7 @@ const bookmarks = (function () {
         <label for="title">Title:</label>
         <input type="text" name="title" class="js-title-entry" required>
         <label for="url">URL:</label>
-        <input type="url" name="url" class="js-url-entry" required>
+        <input type="url" id="url" name="url" class="js-url-entry" required>
         <label for="desc">Description:</label>
         <input type="text" name="desc" class="js-discription-entry" required>
         <label for="rating">Rating:</label>

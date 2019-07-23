@@ -9,6 +9,8 @@ const store = (function() {
 
   let bookmarks = [];
 
+  let sortByRating = 0;
+
   const findById = function(id) {
     return this.bookmarks.find(bookmark => bookmark.id === id);
   };
@@ -27,12 +29,18 @@ const store = (function() {
     this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== id);
   };
 
+  const filterByRating = function() {
+    return bookmarks.filter(bookmark => bookmark.rating >= this.sortByRating);
+  };
+
   return {
-    findById,
     addNewBookmark,
     bookmarks,
+    sortByRating,
+    findById,
     addBookmark,
     bookmarkExpand,
     deleteBookmark,
+    filterByRating,
   };
 })();
