@@ -57,13 +57,13 @@ const bookmarks = (function () {
     $('main').on('submit', '.add-bookmark-form', e => {
       e.preventDefault();
       console.log('add bookmark');
-      // store.addNewBookmark = false;
-      // api.createItem(serializeJson($('.add-bookmark-form')[0]))
-      //   .then(res => res.json())
-      //   .then(bookmark => {
-      //     store.addBookmark(bookmark);
-      //     render();
-      //   });
+      store.addNewBookmark = false;
+      api.createItem(serializeJson($('.add-bookmark-form')[0]))
+        .then(res => res.json())
+        .then(bookmark => {
+          store.addBookmark(bookmark);
+          render();
+        });
     });
   };
 
@@ -111,10 +111,10 @@ const bookmarks = (function () {
 
   const getAppButtonHtml = function() {
     return `
-    <form class="js-app-form">
-        <button type="submit" class="js-add-new">Add Bookmark</button>
-        <input type="button" class="js-sort" value="Filter by Rating"/>
-        <select class="js-rating">
+    <div class="app-buttons">
+        <button type="submit" class="button js-add-new">Add Bookmark</button>
+        <input type="button" class="button js-sort" value="Filter by Rating"/>
+        <select class="button js-rating">
           <option>Show All</option>
           <option>1 Star</option>
           <option>2 Stars</option>
@@ -122,34 +122,42 @@ const bookmarks = (function () {
           <option>4 Stars</option>
           <option>5 Stars</option>
         </select>
-    </form>`;
+    </div>`;
   };
 
   const getAddBookmarkHtml = function() {
     return `
     <form action="#" class="add-bookmark-form">
-        <label for="title">Title:</label>
+      <ledgend class="ledgend">Add a New Bookmark</ledgend>
+      <label for="title">Title:
         <input type="text" id="title" name="title" class="js-title-entry" required>
+      </label>
+      <label for="url">URL:
+        <input type="url" id="url" name="url" class="js-url-entry" required>
+      </label>
+      <label for="desc">Description:
+        <input type="text" id="desc" name="desc" class="js-discription-entry" required>
+        </label>
+      <label for="rating">Rating:
+        <input class="js-rating-entry" id="rating" type="number" name="rating" step="1" min="1" max="5" required>
+      </label>
         <button class="js-add-bookmark" type="submit">Add Item</button>
     </form>`;
-    // <label for="url">URL:</label>
-    //     <input type="url" id="url" name="url" class="js-url-entry" required>
-    //     <label for="desc">Description:</label>
-    //     <input type="text" id="desc" name="desc" class="js-discription-entry" required>
-    //     <label for="rating">Rating:</label>
-    //     <input class="js-rating-entry" id="rating" type="number" name="rating" step="1" min="1" max="5" required>
-    //     
+    
+        
   };
 
   const getBookmarksHtml = function(bookmarks) {
     return bookmarks.map(bookmark => { 
       return `
         <li data-id=${bookmark.id}>
-            <div data-id=${bookmark.id}>${bookmark.title}</div>
+            <div class="title">${bookmark.title}</div>
             <div class="stars">${getStars(bookmark)}</div>
             ${getExpandedHtml(bookmark)}
-            <button type="submit" class="js-expand-bookmark">Expand</button>
-            <button type="submit" class="js-delete-bookmark">Delete</button>
+            <div class="bookmark-buttons">
+              <button type="submit" class="button js-expand-bookmark">Expand</button>
+              <button type="submit" class="button js-delete-bookmark">Delete</button>
+            </div>
         </li>`;
     });
   };
@@ -164,8 +172,8 @@ const bookmarks = (function () {
 
   const getExpandedHtml = function(bookmark) {
     if (bookmark.expand) return `
-      <div class="desc">${bookmark.desc}</div>
-      <div class="url-link"><a href="${bookmark.url}">Visit Site</a></div>`;
+      <div class="desc">Site Description: ${bookmark.desc}</div>
+      <div class="url-link">\n -<a href="${bookmark.url}">Visit Site</a></div>`;
     else return '';
   };
 
