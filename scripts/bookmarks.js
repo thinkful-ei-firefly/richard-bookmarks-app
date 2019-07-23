@@ -54,18 +54,20 @@ const bookmarks = (function () {
 
   //On add bookmake page, adds the bookmark when pressed
   const handleAddBookmark = function() {
-    $('main').on('click', '.js-add-bookmark', e => {
+    $('main').on('submit', '.add-bookmark-form', e => {
       e.preventDefault();
-      store.addNewBookmark = false;
-      api.createItem(serializeJson($('.add-bookmark-form')[0]))
-        .then(res => res.json())
-        .then(bookmark => {
-          store.addBookmark(bookmark);
-          render();
-        });
+      console.log('add bookmark');
+      // store.addNewBookmark = false;
+      // api.createItem(serializeJson($('.add-bookmark-form')[0]))
+      //   .then(res => res.json())
+      //   .then(bookmark => {
+      //     store.addBookmark(bookmark);
+      //     render();
+      //   });
     });
   };
 
+  //Expand 
   const handleExpandBookmark = function() {
     $('main').on('click', '.js-expand-bookmark', e=> {
       e.preventDefault();
@@ -125,17 +127,18 @@ const bookmarks = (function () {
 
   const getAddBookmarkHtml = function() {
     return `
-    <form class="add-bookmark-form">
+    <form action="#" class="add-bookmark-form">
         <label for="title">Title:</label>
-        <input type="text" name="title" class="js-title-entry" required>
-        <label for="url">URL:</label>
-        <input type="url" id="url" name="url" class="js-url-entry" required>
-        <label for="desc">Description:</label>
-        <input type="text" name="desc" class="js-discription-entry" required>
-        <label for="rating">Rating:</label>
-        <input class="js-rating-entry" type="number" name="rating" step="1" min="1" max="5" required>
+        <input type="text" id="title" name="title" class="js-title-entry" required>
         <button class="js-add-bookmark" type="submit">Add Item</button>
     </form>`;
+    // <label for="url">URL:</label>
+    //     <input type="url" id="url" name="url" class="js-url-entry" required>
+    //     <label for="desc">Description:</label>
+    //     <input type="text" id="desc" name="desc" class="js-discription-entry" required>
+    //     <label for="rating">Rating:</label>
+    //     <input class="js-rating-entry" id="rating" type="number" name="rating" step="1" min="1" max="5" required>
+    //     
   };
 
   const getBookmarksHtml = function(bookmarks) {
@@ -143,8 +146,8 @@ const bookmarks = (function () {
       return `
         <li data-id=${bookmark.id}>
             <div data-id=${bookmark.id}>${bookmark.title}</div>
+            <div class="stars">${getStars(bookmark)}</div>
             ${getExpandedHtml(bookmark)}
-            ${getStars(bookmark)}
             <button type="submit" class="js-expand-bookmark">Expand</button>
             <button type="submit" class="js-delete-bookmark">Delete</button>
         </li>`;
@@ -160,7 +163,9 @@ const bookmarks = (function () {
   };
 
   const getExpandedHtml = function(bookmark) {
-    if (bookmark.expand) return `<p>${bookmark.desc}</p>`;
+    if (bookmark.expand) return `
+      <div class="desc">${bookmark.desc}</div>
+      <div class="url-link"><a href="${bookmark.url}">Visit Site</a></div>`;
     else return '';
   };
 
