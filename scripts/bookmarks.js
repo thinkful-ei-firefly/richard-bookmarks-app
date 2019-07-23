@@ -29,6 +29,7 @@ const bookmarks = (function () {
     handleAddBookmark();
     handleExpandBookmark();
     handleDeleteBookmark();
+    handleSortByRating();
   };
 
   const onStart = function() {
@@ -81,8 +82,13 @@ const bookmarks = (function () {
           store.deleteBookmark(id);
           render();
         });
-      //update the store
-      //render
+    });
+  };
+
+  const handleSortByRating = function() {
+    $('main').on('click', '.js-sort', e => {
+      e.preventDefault();
+      console.log('Sort by Rating button pushed');
     });
   };
 
@@ -110,16 +116,9 @@ const bookmarks = (function () {
         <input type="url" name="url" class="js-url-entry" required>
         <label for="desc">Description:</label>
         <input type="text" name="desc" class="js-discription-entry" required>
-        <label for="rating">Rating</label>
-        <input type="number" name="rating" list="numbers" class="js-rating-entry" required>
-        <datalist id="numbers">
-                <option value="5">
-                <option value="4">
-                <option value="3">
-                <option value="2">
-                <option value="1">
-        </datalist>
-        <button type="submit" class="js-add-bookmark">Add Item</button>
+        <label for="rating">Rating:</label>
+        <input class="js-rating-entry" type="number" name="rating" step="1" min="1" max="5" required>
+        <button class="js-add-bookmark" type="submit">Add Item</button>
     </form>`;
   };
 
