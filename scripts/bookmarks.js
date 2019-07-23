@@ -6,8 +6,9 @@
 //eslint-disable-next-line no-unused-vars
 const bookmarks = (function () {
   
+  //renders changes to html
   const render = function() {
-    console.log('render ran');
+    //console.log('render ran');
     let bookmarks = [ ...store.bookmarks ];
     
     //bookmark sort by rating: 0 --> show all
@@ -26,6 +27,7 @@ const bookmarks = (function () {
     }
   };
 
+  //runs all the event handlers
   const eventBinder = function() {
     handleAddNew();
     handleAddBookmark();
@@ -34,6 +36,7 @@ const bookmarks = (function () {
     handleSortByRating();
   };
 
+  //On start loads all bookmarks stored in the API to store.bookmarks
   const onStart = function() {
     api.getItems()
       .then(res => res.json())
@@ -43,7 +46,7 @@ const bookmarks = (function () {
       } );
   };
   
-  //On main page, goes to add bookmark page when pressed
+  //Goes to add bookmark page when pressed
   const handleAddNew = function() {
     $('main').on('click', '.js-add-new', e => {
       e.preventDefault();
@@ -52,12 +55,13 @@ const bookmarks = (function () {
     });
   };
 
-  //On add bookmake page, adds the bookmark when pressed
+  //Updates the API and store with a new bookmark, with inputs filled out
   const handleAddBookmark = function() {
     $('main').on('submit', '.add-bookmark-form', e => {
       e.preventDefault();
-      console.log('add bookmark');
+      // console.log('add bookmark');
       store.addNewBookmark = false;
+      store.sortByRating = 0;
       api.createItem(serializeJson($('.add-bookmark-form')[0]))
         .then(res => res.json())
         .then(bookmark => {
@@ -67,7 +71,7 @@ const bookmarks = (function () {
     });
   };
 
-  //Expand 
+  //Expands a bookmark to show description and link
   const handleExpandBookmark = function() {
     $('main').on('click', '.js-expand-bookmark', e=> {
       e.preventDefault();
@@ -77,6 +81,7 @@ const bookmarks = (function () {
     });
   };
 
+  //Delete's a bookmark
   const handleDeleteBookmark = function() {
     $('main').on('click', '.js-delete-bookmark', e=> {
       e.preventDefault();
@@ -89,6 +94,7 @@ const bookmarks = (function () {
     });
   };
 
+  //Filters the bookmarks by rating
   const handleSortByRating = function() {
     $('main').on('click', '.js-sort', e => {
       e.preventDefault();
@@ -130,13 +136,13 @@ const bookmarks = (function () {
     <form action="#" class="add-bookmark-form">
       <ledgend class="ledgend">Add a New Bookmark</ledgend>
       <label for="title">Title:
-        <input type="text" id="title" name="title" class="js-title-entry" required>
+        <input type="text" id="title" name="title" class="js-title-entry" placeholder="Google" required>
       </label>
       <label for="url">URL:
-        <input type="url" id="url" name="url" class="js-url-entry" required>
+        <input type="url" id="url" name="url" class="js-url-entry" placeholder="http://www.google.com" required>
       </label>
       <label for="desc">Description:
-        <input type="text" id="desc" name="desc" class="js-discription-entry" required>
+        <input type="text" id="desc" name="desc" class="js-discription-entry" placeholder="Search engine" required>
         </label>
       <label for="rating">Rating:
         <input class="js-rating-entry" id="rating" type="number" name="rating" step="1" min="1" max="5" required>
@@ -151,8 +157,10 @@ const bookmarks = (function () {
     return bookmarks.map(bookmark => { 
       return `
         <li data-id=${bookmark.id}>
-            <div class="title">${bookmark.title}</div>
-            <div class="stars">${getStars(bookmark)}</div>
+            <div class="bookmark-top">
+              <div class="title">${bookmark.title}</div>
+              <div class="stars">${getStars(bookmark)}</div>
+            </div>
             ${getExpandedHtml(bookmark)}
             <div class="bookmark-buttons">
               <button type="submit" class="button js-expand-bookmark">Expand</button>

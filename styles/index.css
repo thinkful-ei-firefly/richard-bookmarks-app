@@ -10,17 +10,45 @@ h1 {
     text-align: center;
     color: aliceblue;
     font-weight: 100;
-    font-size: 48px;
+    font-size: 36px;
 }
 
 .app-buttons {
     text-align: center;
 }
 
+.button {
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px 4px;
+    margin: 1px;
+    text-decoration: none;
+    background: aliceblue;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out,
+                transform 150ms ease;
+}
+
+.button:hover,
+.button:focus {
+    background: lightslategray;
+}
+
+.button:focus {
+    outline: 2px solid black;
+}
+
 
 ul {
     list-style: none;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 1;
+
 }
 
 li {
@@ -30,10 +58,11 @@ li {
     text-align: left;
     margin: 10px;
     padding: 10px;
-    max-width: 400px;
+    min-width: 250px;
+    flex-shrink: 1;
 }
 
-.button, span, a, option, input, .add-bookmark-form > *, li > * {
+span, a, option, input, .add-bookmark-form > *, li > * {
     background-color: aliceblue;
 }
 
@@ -42,14 +71,6 @@ label {
     margin: 5px;
 }
 
-.ledgend {
-    text-align: center;
-    font-weight: 300;
-}
-
-.js-add-bookmark {
-    text-align: center;
-}
 
 .add-bookmark-form {
     display: block;
@@ -59,14 +80,7 @@ label {
     text-align: left;
     margin-right: 20px;
     margin-left: 20px;
-    padding: 10px;
-    
-}
-
-.url-link {
-    margin-top: 10px;
-    margin-left: 30px;
-    background-color: aliceblue;
+    padding: 10px;    
 }
 
 .checked {
@@ -74,25 +88,37 @@ label {
 }
 
 .title {
-    display: inline-flex;
     font-size: 24px;
     margin-right: 30px;
     margin-left: 10px;
     margin-bottom: 10px;
     background-color: aliceblue;
+    
 }
 
-.bookmark-buttons {
-    text-align: right;
+.bookmark-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .stars {
     display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
-/*
-Larger screen size
-*/
+.bookmark-buttons {
+    text-align: right;
+    margin: 10px;
+}
+
+.desc {
+    padding: 10px;
+}
+
+/* Larger screen size */
 
 @media (min-width: 700px) {
 
@@ -101,6 +127,10 @@ Larger screen size
         color: aliceblue;
         font-weight: 100;
         font-size: 56px;
+    }
+
+    li {
+        min-width: 350px;
     }
 
 }

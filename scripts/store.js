@@ -30,7 +30,7 @@ const store = (function() {
   };
 
   const filterByRating = function() {
-    return bookmarks.filter(bookmark => bookmark.rating >= this.sortByRating);
+    return this.bookmarks.filter(bookmark => bookmark.rating >= this.sortByRating);
   };
 
   return {
