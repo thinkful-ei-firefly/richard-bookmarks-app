@@ -44,7 +44,6 @@ const bookmarks = (function () {
   const handleAddNew = function() {
     $('main').on('click', '.js-add-new', e => {
       e.preventDefault();
-      console.log('Add Bookmark Button Pressed');
       store.addNewBookmark = true;
       render();
     });
@@ -54,7 +53,6 @@ const bookmarks = (function () {
   const handleAddBookmark = function() {
     $('main').on('click', '.js-add-bookmark', e => {
       e.preventDefault();
-      console.log('Add Bookmark Form Button Pressed');
       store.addNewBookmark = false;
       api.createItem(serializeJson($('.add-bookmark-form')[0]))
         .then(res => res.json())
@@ -68,7 +66,6 @@ const bookmarks = (function () {
   const handleExpandBookmark = function() {
     $('main').on('click', '.js-expand-bookmark', e=> {
       e.preventDefault();
-      console.log('Expand Bookmark Button Pressed');
       const id = $(e.target).closest('li').data('id');
       store.bookmarkExpand(id);
       render();
@@ -78,7 +75,6 @@ const bookmarks = (function () {
   const handleDeleteBookmark = function() {
     $('main').on('click', '.js-delete-bookmark', e=> {
       e.preventDefault();
-      console.log('Delete Bookmark Button Pressed');
       const id = $(e.target).closest('li').data('id');
       api.deleteItem(id)
         .then(() => {
@@ -128,14 +124,12 @@ const bookmarks = (function () {
   };
 
   const getBookmarksHtml = function(bookmarks) {
-    return bookmarks.map(bookmark => {
-      let expanded = getExpandedHtml(bookmark);
-      let stars = getStars(bookmark);
+    return bookmarks.map(bookmark => { 
       return `
         <li data-id=${bookmark.id}>
             <div data-id=${bookmark.id}>${bookmark.title}</div>
-            ${expanded}
-            ${stars}
+            ${getExpandedHtml(bookmark)}
+            ${getStars(bookmark)}
             <button type="submit" class="js-expand-bookmark">Expand</button>
             <button type="submit" class="js-delete-bookmark">Delete</button>
         </li>`;
@@ -148,16 +142,6 @@ const bookmarks = (function () {
       else return '<span class="fa fa-star"></span>';
     })
       .join('');
-    /*let stars = '';
-    for (let i=0; i<5; i++) {
-      if(i < bookmark.rating) {
-        stars += '<span class="fa fa-star checked"></span>';
-      }
-      else {
-        stars += '<span class="fa fa-star"></span>';
-      }
-    }
-    return stars;*/
   };
 
   const getExpandedHtml = function(bookmark) {

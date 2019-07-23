@@ -1,5 +1,5 @@
 'use strict';
-/*global api*/
+
 
 //store is for acting on bookmark items
 //eslint-disable-next-line no-unused-vars
@@ -19,12 +19,8 @@ const store = (function() {
   };
 
   const bookmarkExpand = function(id) {
-    console.log(id);
     let bookmark = this.findById(id);
     bookmark.expand = !bookmark.expand;
-    //this.findById(id).expand = !this.findById(id).expand;
-    console.log(this.findById(id).expand);
-    //console.log(bookmarks);
   };
 
   const deleteBookmark = function(id) {
