@@ -15,7 +15,7 @@ const bookmarks = (function () {
       $('.bookmarks').html('');
     } else {
 
-      //deal with expanded
+      //deal with expanded - in getBookmarksHtml
       
       $('.app-buttons').html(getAppButtonHtml()); 
       $('.add-bookmarks').html('');
@@ -27,6 +27,7 @@ const bookmarks = (function () {
   const eventBinder = function() {
     handleAddNew();
     handleAddBookmark();
+    handleExpandBookmark();
     handleDeleteBookmark();
   };
 
@@ -57,11 +58,20 @@ const bookmarks = (function () {
       store.addNewBookmark = false;
       api.createItem(serializeJson($('.add-bookmark-form')[0]))
         .then(res => res.json())
-        .then(item => {
-          item.expand = false;
-          store.addBookmark(item);
+        .then(bookmark => {
+          store.addBookmark(bookmark);
           render();
         });
+    });
+  };
+
+  const handleExpandBookmark = function() {
+    $('main').on('click', '.js-expand-bookmark', e=> {
+      e.preventDefault();
+      console.log('Expand Bookmark Button Pressed');
+      const id = $(e.target).closest('li').data('id');
+      store.bookmarkExpand(id);
+      render();
     });
   };
 
@@ -119,26 +129,40 @@ const bookmarks = (function () {
 
   const getBookmarksHtml = function(bookmarks) {
     return bookmarks.map(bookmark => {
-      console.log(bookmark);
-      let stars = '';
-      for (let i=0; i<5; i++) {
-        console.log(bookmark.rating + ' ' + i);
-        if(i < bookmark.rating) {
-          stars += '<span class="fa fa-star checked"></span>';
-          console.log('checked');
-        }
-        else {
-          stars += '<span class="fa fa-star"></span>';
-        }
-      }
+      let expanded = getExpandedHtml(bookmark);
+      let stars = getStars(bookmark);
       return `
         <li data-id=${bookmark.id}>
             <div data-id=${bookmark.id}>${bookmark.title}</div>
+            ${expanded}
             ${stars}
             <button type="submit" class="js-expand-bookmark">Expand</button>
             <button type="submit" class="js-delete-bookmark">Delete</button>
         </li>`;
     });
+  };
+
+  const getStars = function(bookmark) {
+    return [0, 1, 2, 3, 4].map((num) => {
+      if (num < bookmark.rating) return '<span class="fa fa-star checked"></span>';
+      else return '<span class="fa fa-star"></span>';
+    })
+      .join('');
+    /*let stars = '';
+    for (let i=0; i<5; i++) {
+      if(i < bookmark.rating) {
+        stars += '<span class="fa fa-star checked"></span>';
+      }
+      else {
+        stars += '<span class="fa fa-star"></span>';
+      }
+    }
+    return stars;*/
+  };
+
+  const getExpandedHtml = function(bookmark) {
+    if (bookmark.expand) return `<p>${bookmark.desc}</p>`;
+    else return '';
   };
 
   return {

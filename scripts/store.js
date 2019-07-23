@@ -9,8 +9,22 @@ const store = (function() {
 
   let bookmarks = [];
 
-  const addBookmark = function(item) {
-    this.bookmarks.push(item);
+  const findById = function(id) {
+    return this.bookmarks.find(bookmark => bookmark.id === id);
+  };
+
+  const addBookmark = function(bookmark) {
+    bookmark.expand= false;
+    this.bookmarks.push(bookmark);
+  };
+
+  const bookmarkExpand = function(id) {
+    console.log(id);
+    let bookmark = this.findById(id);
+    bookmark.expand = !bookmark.expand;
+    //this.findById(id).expand = !this.findById(id).expand;
+    console.log(this.findById(id).expand);
+    //console.log(bookmarks);
   };
 
   const deleteBookmark = function(id) {
@@ -18,9 +32,11 @@ const store = (function() {
   };
 
   return {
+    findById,
     addNewBookmark,
     bookmarks,
     addBookmark,
+    bookmarkExpand,
     deleteBookmark,
   };
 })();
