@@ -181,7 +181,7 @@ const bookmarks = (function () {
   const getExpandedHtml = function(bookmark) {
     if (bookmark.expand) return `
       <div class="desc">Site Description: ${bookmark.desc}</div>
-      <div class="url-link">\n -<a href="${bookmark.url}">Visit Site</a></div>`;
+      <div class="url-link">\n -<a href="${bookmark.url}" target="_blank">Visit Site</a></div>`;
     else return '';
   };
 

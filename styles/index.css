@@ -42,7 +42,7 @@ h1 {
 
 
 ul {
-    list-style: none;
+    /* list-style: none; */
     display: flex;
     flex-direction: column;
     justify-content: center;
