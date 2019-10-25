@@ -3,7 +3,8 @@ Base styles for mobile first design
 */
 
 body {
-    background: url('../images/ben-klea-Sfs_64L9UHE-unsplash.jpg')
+    background: url('../images/ben-klea-Sfs_64L9UHE-unsplash.jpg');
+    background-position: center;
 }
 
 * {
